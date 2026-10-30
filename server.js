@@ -9,7 +9,7 @@ app.use(express.json({ limit: "32kb" }));
 
 const PORT = Number(process.env.PORT || 3000);
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const SERVER_API_TOKEN = process.env.SERVER_API_TOKEN;
+const SERVER_API_TOKEN = (process.env.SERVER_API_TOKEN || "").trim();
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
 function safeEqual(a, b) {
@@ -35,6 +35,7 @@ app.post("/v1/generate", async (req, res) => {
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
 
   if (!SERVER_API_TOKEN || !safeEqual(token, SERVER_API_TOKEN)) {
+    console.log("AUTH refusee: recu=" + token.length + " car., attendu=" + SERVER_API_TOKEN.length + " car.");
     return res.status(401).json({ error: "Authentification invalide." });
   }
   if (!GEMINI_API_KEY) {
