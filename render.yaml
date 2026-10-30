@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: gemini-server-steve
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SERVER_API_TOKEN
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
